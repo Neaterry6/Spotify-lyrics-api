@@ -3,7 +3,7 @@ from spotify_lyrics_scraper import getToken, getLyrics, spotifyDict
 
 app = FastAPI()
 
-# 🎟️ Your Spotify sp_dc cookie — required for lyrics access
+# 🔐 Your Spotify sp_dc cookie — required for lyrics access
 SP_DC = (
     "AQAAkbYKb2gSiNk8Rb70_bpUnjpzPMDDZriDa48pZr0-aJ0GGBfeMEXkZl_QvKVSd7s62tvXBlOFtQV4ox_-RvH4qdgO3A98aOqiFRQFd9feTsLFOm7sLVxNVu1XFCUEJE50YZIwzi64WhFInlUx_aLLYdPhbTGiIBvlzZRRZKWwNocxaIkmsUheO8k2cnr3ia60XwxcXxeXM6ynQErjvVjD7bWrSO-UQ0yHqtAjZsLqVifHCIVOrd-zNwrqtW6OBGlktB1ZeNi9dg"
 )
@@ -22,8 +22,17 @@ def get_lyrics(query: str = Query(..., description="Song name and artist")):
         token = getToken(SP_DC)
         lyrics_data = getLyrics(token, songName=query)
 
+        if not lyrics_data:
+            return {
+                "title": query,
+                "lyrics": None,
+                "thumbnail": None,
+                "creator": "Broken Vzn",
+                "error": "Empty response from Spotify. Check your cookie or query."
+            }
+
         if isinstance(lyrics_data, spotifyDict):
-            full_lyrics = lyrics_data.formatLyrics(mode=0)  # plain text
+            full_lyrics = lyrics_data.formatLyrics(mode=0)
             thumbnail = lyrics_data.get("image") or None
 
             return {
