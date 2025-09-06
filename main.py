@@ -63,4 +63,4 @@ def get_lyrics(query: str = Query(None, description="Song name and artist")):
             "thumbnail": None,
             "creator": "Broken Vzn",
             "error": str(e)
-        }
+        } 
