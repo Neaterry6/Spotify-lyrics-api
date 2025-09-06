@@ -17,7 +17,13 @@ def home():
     }
 
 @app.get("/lyrics")
-def get_lyrics(query: str = Query(..., description="Song name and artist")):
+def get_lyrics(query: str = Query(None, description="Song name and artist")):
+    if not query:
+        return {
+            "message": "Missing query parameter. Use /lyrics?query=song+name+by+artist",
+            "creator": "Broken Vzn"
+        }
+
     try:
         token = getToken(SP_DC)
         lyrics_data = getLyrics(token, songName=query)
