@@ -3,7 +3,7 @@ from spotify_lyrics_scraper import getToken, getLyrics, spotifyDict
 
 app = FastAPI()
 
-# 🔐 Your Spotify sp_dc cookie — required for lyrics access
+# 🔐 Your Spotify sp_dc cookie
 SP_DC = (
     "AQAAkbYKb2gSiNk8Rb70_bpUnjpzPMDDZriDa48pZr0-aJ0GGBfeMEXkZl_QvKVSd7s62tvXBlOFtQV4ox_-RvH4qdgO3A98aOqiFRQFd9feTsLFOm7sLVxNVu1XFCUEJE50YZIwzi64WhFInlUx_aLLYdPhbTGiIBvlzZRRZKWwNocxaIkmsUheO8k2cnr3ia60XwxcXxeXM6ynQErjvVjD7bWrSO-UQ0yHqtAjZsLqVifHCIVOrd-zNwrqtW6OBGlktB1ZeNi9dg"
 )
