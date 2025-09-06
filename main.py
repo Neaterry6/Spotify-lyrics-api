@@ -3,13 +3,15 @@ from spotify_lyrics_scraper import getToken, getLyrics, spotifyDict
 
 app = FastAPI()
 
-# Paste your actual sp_dc cookie value here
-SP_DC = "AQANYSRZpndtOAAr007tzf1CW2FGA40WYp96t1UHChgGCWVxfdmcz9Q7Vmkb4JZvu8GzbAWdk5W6J-0SKE4_40nXo5XHprBNVaoSsdROJYsFRyuTeazmVKGL7TMK4TKed8N1A7NiGTi1kwHeb1yXH9YxTyQGtEdz71147KxIGBdyc0-o9HaiRholSHzlEWVW2Aai4oKrnLK0ruYfu4YvlucJ1h_oGw-Jn3KDbCXNvkmOqIahdrU76BCNHN2msYeaS8pKVE-LvMTtkfg"
+# 🎟️ Your Spotify sp_dc cookie — required for lyrics access
+SP_DC = (
+    "AQAAkbYKb2gSiNk8Rb70_bpUnjpzPMDDZriDa48pZr0-aJ0GGBfeMEXkZl_QvKVSd7s62tvXBlOFtQV4ox_-RvH4qdgO3A98aOqiFRQFd9feTsLFOm7sLVxNVu1XFCUEJE50YZIwzi64WhFInlUx_aLLYdPhbTGiIBvlzZRRZKWwNocxaIkmsUheO8k2cnr3ia60XwxcXxeXM6ynQErjvVjD7bWrSO-UQ0yHqtAjZsLqVifHCIVOrd-zNwrqtW6OBGlktB1ZeNi9dg"
+)
 
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to Broken Vzn's Lyrics API",
+        "message": "🎶 Welcome to Broken Vzn's Lyrics API",
         "usage": "/lyrics?query=song+name+by+artist",
         "creator": "Broken Vzn"
     }
@@ -22,22 +24,28 @@ def get_lyrics(query: str = Query(..., description="Song name and artist")):
 
         if isinstance(lyrics_data, spotifyDict):
             full_lyrics = lyrics_data.formatLyrics(mode=0)  # plain text
+            thumbnail = lyrics_data.get("image") or None
+
             return {
                 "title": lyrics_data.songName,
                 "lyrics": full_lyrics,
+                "thumbnail": thumbnail,
                 "creator": "Broken Vzn"
             }
-        else:
-            return {
-                "title": query,
-                "lyrics": None,
-                "creator": "Broken Vzn",
-                "error": str(lyrics_data)
-            }
+
+        return {
+            "title": query,
+            "lyrics": None,
+            "thumbnail": None,
+            "creator": "Broken Vzn",
+            "error": str(lyrics_data)
+        }
+
     except Exception as e:
         return {
             "title": query,
             "lyrics": None,
+            "thumbnail": None,
             "creator": "Broken Vzn",
             "error": str(e)
-      }
+        }
