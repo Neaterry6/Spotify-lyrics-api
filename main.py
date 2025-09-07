@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify
 import requests
 import urllib.parse
@@ -6,6 +7,7 @@ import os
 
 app = Flask(__name__)
 
+# 🔐 Genius API Access Token
 GENIUS_ACCESS_TOKEN = "2yHuhzVQAmuuHKKcJekeM3wXiBLQzt8GDqWVodgzq7slXnwZSZqLqXnhwVcjIwn9"
 
 # 🔍 Search Genius for lyrics page
@@ -36,7 +38,6 @@ def scrape_lyrics_from_url(lyrics_url):
         soup = BeautifulSoup(page.text, "html.parser")
         lyrics_divs = soup.find_all("div", class_="Lyrics__Container")
         if not lyrics_divs:
-            # fallback for older layout
             lyrics_divs = soup.find_all("div", class_="lyrics")
         lyrics = "\n".join([div.get_text(separator="\n").strip() for div in lyrics_divs])
         return lyrics if lyrics else None
@@ -75,6 +76,11 @@ def lyrics(query):
         "lyrics": lyrics_text,
         "creator": "Broken Vzn"
     })
+
+# 🏠 Optional root route
+@app.route('/')
+def home():
+    return jsonify({"message": "Genius Lyrics API is running", "creator": "Broken Vzn"})
 
 # 🚀 Render-compatible port binding
 if __name__ == '__main__':
