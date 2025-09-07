@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify
 import requests
 import urllib.parse
@@ -36,11 +35,19 @@ def scrape_lyrics_from_url(lyrics_url):
     try:
         page = requests.get(lyrics_url, timeout=5)
         soup = BeautifulSoup(page.text, "html.parser")
+
+        # Modern Genius layout
         lyrics_divs = soup.find_all("div", class_="Lyrics__Container")
-        if not lyrics_divs:
-            lyrics_divs = soup.find_all("div", class_="lyrics")
-        lyrics = "\n".join([div.get_text(separator="\n").strip() for div in lyrics_divs])
-        return lyrics if lyrics else None
+        if lyrics_divs:
+            lyrics = "\n".join([div.get_text(separator="\n").strip() for div in lyrics_divs])
+            return lyrics if lyrics else None
+
+        # Legacy layout fallback
+        legacy_block = soup.find("div", class_="lyrics")
+        if legacy_block:
+            return legacy_block.get_text(separator="\n").strip()
+
+        return None
     except Exception as e:
         print(f"[Scrape Error] {e}")
         return None
