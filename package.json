@@ -1,0 +1,8 @@
+{
+  "name": "lyrics-api",
+  "version": "1.0.0",
+  "main": "lyrics.js",
+  "dependencies": {
+    "genius-lyrics-api": "^2.0.6"
+  }
+}
