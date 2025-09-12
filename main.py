@@ -5,8 +5,9 @@ app = FastAPI()
 
 @app.get("/search")
 def get_lyrics(query: str = Query(..., description="e.g. 'lyrics of baby girl by joeboy'")):
-    if "lyrics of" in query.lower():
-        parts = query.lower().replace("lyrics of", "").strip().split("by")
+    query_lower = query.lower().strip()
+    if query_lower.startswith("lyrics of") and "by" in query_lower:
+        parts = query_lower.replace("lyrics of", "").strip().split("by")
         if len(parts) == 2:
             title = parts[0].strip()
             artist = parts[1].strip()
